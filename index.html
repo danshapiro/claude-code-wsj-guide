@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code for Journalists — A Field Guide for Miriam &amp; Katherine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1a1a;--cream:#faf8f5;--gold:#c4a35a;--gold-light:#f0e6c8;
+  --blue:#2563eb;--blue-dark:#1e40af;--coral:#e85d4a;
+  --wsj-rule:#c4c4c4;--font-serif:'Playfair Display',Georgia,serif;
+  --font-sans:'Inter',-apple-system,system-ui,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);color:var(--ink);background:var(--cream);overflow-x:hidden;line-height:1.6}
+
+/* ── UTILITY ────────────────────────────────────── */
+.container{max-width:900px;margin:0 auto;padding:0 24px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+
+/* ── HERO ───────────────────────────────────────── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;position:relative;
+  background:linear-gradient(170deg,#1a1a1a 0%,#2a2540 40%,#3b2f5c 70%,#1a1a1a 100%);
+  color:#fff;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 50% at 50% 40%,rgba(196,163,90,.15),transparent);
+  pointer-events:none;
+}
+
+/* animated dots background */
+.hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero-particles span{
+  position:absolute;width:4px;height:4px;border-radius:50%;
+  background:rgba(196,163,90,.35);animation:float-up linear infinite;
+}
+@keyframes float-up{
+  0%{transform:translateY(100vh) scale(0);opacity:0}
+  10%{opacity:1}
+  90%{opacity:1}
+  100%{transform:translateY(-10vh) scale(1);opacity:0}
+}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  border-radius:100px;padding:8px 20px;font-size:.85rem;
+  letter-spacing:.03em;margin-bottom:32px;backdrop-filter:blur(8px);
+}
+.hero-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+
+.hero h1{
+  font-family:var(--font-serif);font-size:clamp(2.5rem,6vw,4.5rem);
+  font-weight:900;line-height:1.08;max-width:800px;margin-bottom:24px;
+}
+.hero h1 .accent{
+  background:linear-gradient(135deg,var(--gold),#e8c97a);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-sub{
+  font-size:clamp(1rem,2vw,1.25rem);max-width:560px;
+  opacity:.8;font-weight:300;line-height:1.5;margin-bottom:40px;
+}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--gold);color:var(--ink);
+  font-weight:600;font-size:1rem;padding:14px 32px;
+  border-radius:8px;text-decoration:none;
+  transition:transform .2s,box-shadow .2s;
+}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(196,163,90,.35)}
+.hero-cta svg{width:20px;height:20px}
+
+.hero-scroll{
+  position:absolute;bottom:32px;
+  animation:bob 2s ease-in-out infinite;
+  opacity:.5;
+}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+.hero-scroll svg{width:28px;height:28px;stroke:#fff;stroke-width:2;fill:none}
+
+/* ── SECTION BASICS ─────────────────────────────── */
+section{padding:80px 0}
+section:nth-child(even){background:#fff}
+
+.section-label{
+  font-family:var(--font-mono);font-size:.75rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-label::before{content:'';width:24px;height:2px;background:var(--gold)}
+.section-title{
+  font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);
+  font-weight:700;line-height:1.15;margin-bottom:16px;
+}
+.section-subtitle{
+  font-size:1.05rem;color:#555;max-width:620px;line-height:1.6;margin-bottom:40px;
+}
+
+/* ── PROFILES ───────────────────────────────────── */
+.profiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:32px;margin-top:40px}
+.profile-card{
+  border:1px solid var(--wsj-rule);border-radius:12px;overflow:hidden;
+  background:#fff;transition:transform .3s,box-shadow .3s;
+  position:relative;
+}
+.profile-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
+.profile-header{
+  background:linear-gradient(135deg,#1a1a1a,#2a2540);
+  padding:32px 28px 24px;color:#fff;position:relative;overflow:hidden;
+}
+.profile-header::after{
+  content:'';position:absolute;right:-30px;top:-30px;
+  width:120px;height:120px;border-radius:50%;
+  background:rgba(196,163,90,.1);
+}
+.profile-initials{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#e8c97a);
+  color:var(--ink);display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-serif);font-weight:700;font-size:1.2rem;
+  margin-bottom:16px;
+}
+.profile-card h3{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;margin-bottom:4px}
+.profile-card .role{font-size:.9rem;opacity:.7;font-weight:300}
+.profile-body{padding:24px 28px}
+.profile-body p{font-size:.95rem;color:#444;line-height:1.65;margin-bottom:12px}
+.profile-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.profile-tags span{
+  font-size:.75rem;padding:4px 12px;border-radius:100px;
+  background:var(--gold-light);color:#8a6d1b;font-weight:500;
+}
+
+/* ── WHY SECTION ────────────────────────────────── */
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px}
+.why-card{
+  padding:28px;border-radius:12px;border:1px solid #e8e4de;
+  background:#fff;transition:border-color .3s,box-shadow .3s;
+}
+.why-card:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(196,163,90,.1)}
+.why-icon{
+  width:48px;height:48px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;font-size:1.5rem;
+}
+.why-icon.research{background:#eef2ff;color:var(--blue)}
+.why-icon.speed{background:#fef3c7;color:#d97706}
+.why-icon.data{background:#ecfdf5;color:#059669}
+.why-card h4{font-weight:600;margin-bottom:8px;font-size:1.05rem}
+.why-card p{font-size:.9rem;color:#666;line-height:1.55}
+
+/* ── TIMELINE / STEPS ───────────────────────────── */
+.steps{position:relative;padding-left:40px;margin-top:40px}
+.steps::before{
+  content:'';position:absolute;left:15px;top:0;bottom:0;
+  width:2px;background:linear-gradient(to bottom,var(--gold),var(--gold-light),transparent);
+}
+.step{position:relative;margin-bottom:48px;opacity:0;transform:translateY(20px);transition:all .6s ease}
+.step.visible{opacity:1;transform:translateY(0)}
+.step-number{
+  position:absolute;left:-40px;top:0;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--gold);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.85rem;
+  box-shadow:0 0 0 4px var(--cream);
+}
+section:nth-child(even) .step-number{box-shadow:0 0 0 4px #fff}
+.step h3{font-family:var(--font-serif);font-size:1.3rem;font-weight:700;margin-bottom:8px}
+.step p{font-size:.95rem;color:#555;line-height:1.6;max-width:650px}
+
+/* ── CODE BLOCKS ────────────────────────────────── */
+.code-block{
+  background:#1e1e2e;color:#cdd6f4;border-radius:10px;
+  padding:20px 24px;margin:16px 0;overflow-x:auto;
+  font-family:var(--font-mono);font-size:.88rem;line-height:1.7;
+  position:relative;border:1px solid #313244;
+}
+.code-block::before{
+  content:'terminal';position:absolute;top:0;right:0;
+  background:#313244;color:#6c7086;font-size:.65rem;
+  padding:4px 12px;border-radius:0 10px 0 6px;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.code-block .prompt{color:#a6e3a1}
+.code-block .comment{color:#6c7086}
+.code-block .cmd{color:#89b4fa}
+.code-block .flag{color:#f9e2af}
+.code-block .url{color:#f5c2e7}
+
+/* typing animation for terminal */
+.typing-line{overflow:hidden;white-space:nowrap;border-right:2px solid var(--gold);width:0;animation:typing 2s steps(40) 1s forwards,blink .5s step-end infinite alternate}
+@keyframes typing{to{width:100%}}
+@keyframes blink{50%{border-color:transparent}}
+
+/* ── SCENARIO CARDS ─────────────────────────────── */
+.scenario-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:24px;margin-top:32px}
+.scenario{
+  border-radius:12px;overflow:hidden;
+  border:1px solid #e8e4de;background:#fff;
+  transition:transform .3s,box-shadow .3s;
+}
+.scenario:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.06)}
+.scenario-top{
+  padding:20px 24px;border-bottom:1px solid #f0ece6;
+  display:flex;align-items:center;gap:14px;
+}
+.scenario-emoji{font-size:1.6rem}
+.scenario-top h4{font-size:1rem;font-weight:600}
+.scenario-top .for{font-size:.8rem;color:var(--gold);font-weight:500;margin-top:2px}
+.scenario-body{padding:20px 24px}
+.scenario-body .exchange{margin-bottom:12px;display:flex;gap:10px}
+.scenario-body .exchange:last-child{margin-bottom:0}
+.bubble-label{
+  font-size:.7rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.08em;min-width:36px;padding-top:4px;
+}
+.bubble-label.you{color:var(--blue)}
+.bubble-label.ai{color:var(--coral)}
+.bubble{
+  font-size:.88rem;line-height:1.55;padding:10px 14px;border-radius:10px;
+  max-width:100%;
+}
+.bubble.you-bubble{background:#eef2ff;color:#1e3a5f}
+.bubble.ai-bubble{background:#fef7ee;color:#5c3d1f}
+
+/* ── CALLOUT ────────────────────────────────────── */
+.callout{
+  border-left:4px solid var(--gold);background:var(--gold-light);
+  padding:20px 24px;border-radius:0 8px 8px 0;margin:24px 0;
+}
+.callout p{font-size:.95rem;color:#5c4a1e;line-height:1.55}
+.callout strong{color:#3d310f}
+
+/* ── PROMPT REVEAL ──────────────────────────────── */
+.prompt-reveal{
+  background:linear-gradient(170deg,#1a1a1a,#2a2540);
+  color:#fff;padding:80px 0;
+}
+.prompt-reveal .section-label{color:var(--gold)}
+.prompt-reveal .section-title{color:#fff}
+.prompt-reveal .section-subtitle{color:rgba(255,255,255,.6)}
+.prompt-card{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;padding:32px;margin-top:32px;
+  backdrop-filter:blur(8px);
+}
+.prompt-card-label{
+  font-family:var(--font-mono);font-size:.7rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.prompt-card-label::before{content:'>';color:var(--gold)}
+.prompt-text{
+  font-size:.92rem;line-height:1.7;color:rgba(255,255,255,.85);
+  font-family:var(--font-mono);white-space:pre-wrap;word-break:break-word;
+}
+.meta-note{
+  margin-top:32px;padding:20px 24px;
+  background:rgba(196,163,90,.08);border-radius:8px;
+  border:1px solid rgba(196,163,90,.2);
+}
+.meta-note p{font-size:.9rem;color:rgba(255,255,255,.7);line-height:1.6}
+.meta-note strong{color:var(--gold)}
+
+/* ── FOOTER ─────────────────────────────────────── */
+footer{
+  text-align:center;padding:40px 24px;
+  font-size:.85rem;color:#888;
+  border-top:1px solid var(--wsj-rule);
+}
+footer a{color:var(--gold);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+/* ── RESPONSIVE ─────────────────────────────────── */
+@media(max-width:480px){
+  .profiles{grid-template-columns:1fr}
+  .scenario-grid{grid-template-columns:1fr}
+  .steps{padding-left:32px}
+  .step-number{left:-32px;width:28px;height:28px;font-size:.75rem}
+}
+
+/* ── SCROLL ANIMATIONS ──────────────────────────── */
+.fade-in{opacity:0;transform:translateY(24px);transition:all .7s cubic-bezier(.22,1,.36,1)}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* ── INTERACTIVE DEMO ───────────────────────────── */
+.demo-terminal{
+  background:#1e1e2e;border-radius:12px;overflow:hidden;
+  border:1px solid #313244;margin-top:32px;max-width:720px;
+}
+.demo-titlebar{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 16px;background:#181825;border-bottom:1px solid #313244;
+}
+.demo-dot{width:12px;height:12px;border-radius:50%}
+.demo-dot.red{background:#f38ba8}
+.demo-dot.yellow{background:#f9e2af}
+.demo-dot.green{background:#a6e3a1}
+.demo-titlebar span{
+  margin-left:auto;font-family:var(--font-mono);
+  font-size:.75rem;color:#6c7086;
+}
+.demo-body{padding:20px 24px;min-height:220px;font-family:var(--font-mono);font-size:.88rem;color:#cdd6f4;line-height:1.8}
+.demo-body .line{opacity:0;animation:line-appear .3s ease forwards}
+@keyframes line-appear{to{opacity:1}}
+
+/* ── COST BADGE ─────────────────────────────────── */
+.price-tag{
+  display:inline-flex;align-items:baseline;gap:4px;
+  font-family:var(--font-serif);
+}
+.price-tag .dollar{font-size:1.2rem;font-weight:700;color:var(--gold)}
+.price-tag .amount{font-size:2.8rem;font-weight:900;color:var(--ink);line-height:1}
+.price-tag .period{font-size:1rem;color:#888;font-weight:400}
+
+/* ── NAV ────────────────────────────────────────── */
+.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(26,26,26,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  padding:0 24px;display:flex;align-items:center;
+  height:52px;transition:transform .3s;
+}
+.topnav.hidden{transform:translateY(-100%)}
+.topnav-logo{
+  font-family:var(--font-serif);font-weight:700;color:#fff;
+  font-size:1rem;display:flex;align-items:center;gap:8px;
+}
+.topnav-logo .mark{
+  width:24px;height:24px;border-radius:6px;
+  background:linear-gradient(135deg,var(--gold),#e8c97a);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink);font-size:.75rem;font-weight:900;
+}
+.topnav-links{
+  margin-left:auto;display:flex;gap:24px;
+  list-style:none;
+}
+.topnav-links a{
+  color:rgba(255,255,255,.6);text-decoration:none;
+  font-size:.82rem;font-weight:500;transition:color .2s;
+}
+.topnav-links a:hover{color:#fff}
+
+@media(max-width:600px){
+  .topnav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="topnav" id="topnav">
+  <div class="topnav-logo">
+    <span class="mark">C</span> Claude Code &times; WSJ
+  </div>
+  <ul class="topnav-links">
+    <li><a href="#why">Why</a></li>
+    <li><a href="#for-you">For You</a></li>
+    <li><a href="#setup">Get Started</a></li>
+    <li><a href="#scenarios">Use Cases</a></li>
+    <li><a href="#how-made">How This Was Made</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-particles" id="particles"></div>
+  <div class="hero-badge"><span class="dot"></span> A guide built entirely by Claude Code</div>
+  <h1>Your New <span class="accent">AI-Powered</span> Reporting Partner</h1>
+  <p class="hero-sub">A hands-on field guide for Miriam&nbsp;Gottfried and Katherine&nbsp;Long — and a live demo of what Claude&nbsp;Code can build in minutes.</p>
+  <a href="#setup" class="hero-cta">
+    Get Started
+    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"/></svg>
+  </a>
+  <div class="hero-scroll">
+    <svg viewBox="0 0 24 24"><polyline points="7 13 12 18 17 13"/><line x1="12" y1="18" x2="12" y2="6"/></svg>
+  </div>
+</section>
+
+<!-- ═══════════ WHY ═══════════ -->
+<section id="why">
+  <div class="container">
+    <div class="section-label">Why This Matters</div>
+    <h2 class="section-title">AI that works the way journalists think</h2>
+    <p class="section-subtitle">Claude Code is a command-line AI assistant that lives in your terminal. It can read files, search the web, write code, analyze data, and build things — all through natural conversation.</p>
+    <div class="why-grid">
+      <div class="why-card fade-in">
+        <div class="why-icon research">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <h4>Deep Research</h4>
+        <p>Ask Claude to search the web, cross-reference sources, and compile findings — like having a tireless research assistant on your beat.</p>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-icon speed">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h4>Rapid Prototyping</h4>
+        <p>Turn an idea into a working tool in minutes — data visualizations, interactive graphics, scrapers for public records. This page is proof.</p>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-icon data">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <h4>Data Wrangling</h4>
+        <p>Parse spreadsheets, clean messy datasets, spot patterns. Great for FOIA dumps, financial filings, or any document-heavy investigation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOR YOU ═══════════ -->
+<section id="for-you">
+  <div class="container">
+    <div class="section-label">Personalized</div>
+    <h2 class="section-title">Built for your beats</h2>
+    <p class="section-subtitle">Claude Code adapts to what you cover. Here's how it might help each of you specifically.</p>
+    <div class="profiles">
+
+      <!-- Miriam -->
+      <div class="profile-card fade-in">
+        <div class="profile-header">
+          <div class="profile-initials">MG</div>
+          <h3>Miriam Gottfried</h3>
+          <div class="role">Investing &amp; Wealth Management Reporter, WSJ</div>
+        </div>
+        <div class="profile-body">
+          <p>From the <em>Heard on the Street</em> column to private equity to your current beat on individual investing and wealth management — you've spent your career translating complex finance for everyday readers.</p>
+          <p>Claude Code could help you analyze 401(k) plan data, model portfolio scenarios, scrape SEC filings for fund disclosures, or quickly prototype interactive charts for stories on market trends.</p>
+          <p>And for your work on <em>WSJ's Take On the Week</em> podcast — imagine using Claude to generate show prep, research talking points, or summarize the week's market action in seconds.</p>
+          <div class="profile-tags">
+            <span>Wealth Management</span>
+            <span>Private Equity</span>
+            <span>SEC Filings</span>
+            <span>Podcast Prep</span>
+            <span>Data Analysis</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Katherine -->
+      <div class="profile-card fade-in">
+        <div class="profile-header">
+          <div class="profile-initials">KL</div>
+          <h3>Katherine Long</h3>
+          <div class="role">Investigations Reporter, WSJ</div>
+        </div>
+        <div class="profile-body">
+          <p>Brown, Columbia J-School's Stabile Center, a Pulitzer Traveling Fellowship, and an Emmy-winning episode of <em>The Weekly</em> — you bring serious investigative chops from Business Insider, The Seattle Times, and now WSJ.</p>
+          <p>Your DOGE investigations showed the power of digital forensics — finding deleted social media profiles and connecting them to government employees. Claude Code can accelerate that kind of work: searching public records, cross-referencing datasets, and building timelines from document dumps.</p>
+          <p>For your next investigation, imagine having an assistant that can parse thousands of pages of FOIA documents, flag anomalies in spending data, or map connections between entities — instantly.</p>
+          <div class="profile-tags">
+            <span>Investigations</span>
+            <span>Public Records</span>
+            <span>Digital Forensics</span>
+            <span>FOIA Analysis</span>
+            <span>Data Journalism</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SETUP ═══════════ -->
+<section id="setup">
+  <div class="container">
+    <div class="section-label">Getting Started</div>
+    <h2 class="section-title">Three steps to your AI newsroom</h2>
+    <p class="section-subtitle">You'll need a personal laptop you can install software on. The whole process takes about 10&nbsp;minutes.</p>
+
+    <div class="steps">
+
+      <div class="step fade-in">
+        <div class="step-number">1</div>
+        <h3>Subscribe to Claude Pro</h3>
+        <p>Go to <strong>claude.ai</strong> and sign up for the <strong>Claude Pro plan</strong> — it's $20/month and gives you access to Claude Code, Anthropic's most capable models, and priority access to new features.</p>
+        <div style="margin-top:16px;">
+          <div class="price-tag">
+            <span class="dollar">$</span>
+            <span class="amount">20</span>
+            <span class="period">/month</span>
+          </div>
+        </div>
+        <div class="callout">
+          <p><strong>Dow Jones policy note:</strong> Check with your IT/compliance team about installing third-party tools on work devices. You may want to use a personal laptop for this. Claude processes prompts on Anthropic's servers — be mindful about entering sensitive unpublished reporting details.</p>
+        </div>
+      </div>
+
+      <div class="step fade-in">
+        <div class="step-number">2</div>
+        <h3>Install Claude Code</h3>
+        <p>Open your terminal and run the installer. On macOS or Linux, it's a single command. No coding experience required — if you can copy-paste into a terminal, you're good.</p>
+        <div class="code-block">
+<span class="comment"># macOS / Linux — one command, no dependencies</span>
+<span class="prompt">$</span> <span class="cmd">curl</span> <span class="flag">-fsSL</span> <span class="url">https://cli.claude.ai/install.sh</span> | <span class="cmd">sh</span>
+
+<span class="comment"># Or if you have Node.js (alternative method)</span>
+<span class="prompt">$</span> <span class="cmd">npm</span> install <span class="flag">-g</span> @anthropic-ai/claude-code
+        </div>
+        <p style="margin-top:12px;color:#888;font-size:.9rem;">Not sure how to open a terminal? On Mac, search for "Terminal" in Spotlight (⌘ + Space). Use <strong>claude.ai</strong> (the chat interface) to walk you through it — just ask!</p>
+      </div>
+
+      <div class="step fade-in">
+        <div class="step-number">3</div>
+        <h3>Authenticate &amp; Go</h3>
+        <p>Run <code style="background:#f0ece6;padding:2px 8px;border-radius:4px;font-family:var(--font-mono);font-size:.88rem">claude</code> in your terminal. A browser window will open for you to log in with your Anthropic account. Once authenticated, you're ready — just start typing what you want to do.</p>
+        <div class="demo-terminal">
+          <div class="demo-titlebar">
+            <div class="demo-dot red"></div>
+            <div class="demo-dot yellow"></div>
+            <div class="demo-dot green"></div>
+            <span>~/Documents</span>
+          </div>
+          <div class="demo-body" id="demo">
+            <!-- filled by JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SCENARIOS ═══════════ -->
+<section id="scenarios">
+  <div class="container">
+    <div class="section-label">In Action</div>
+    <h2 class="section-title">What you could do on day one</h2>
+    <p class="section-subtitle">Real scenarios tailored to your beats. These are actual things you could type into Claude Code.</p>
+
+    <div class="scenario-grid">
+
+      <div class="scenario fade-in">
+        <div class="scenario-top">
+          <div class="scenario-emoji">📊</div>
+          <div>
+            <h4>Analyze a financial dataset</h4>
+            <div class="for">Great for Miriam</div>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="exchange">
+            <div class="bubble-label you">YOU</div>
+            <div class="bubble you-bubble">I have a CSV of 401(k) plan fees from 500 companies. Find the ones charging above-average fees and create a chart showing the distribution.</div>
+          </div>
+          <div class="exchange">
+            <div class="bubble-label ai">AI</div>
+            <div class="bubble ai-bubble">I'll read the CSV, calculate statistics, flag outliers, and generate an interactive chart you can embed. Give me a moment...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scenario fade-in">
+        <div class="scenario-top">
+          <div class="scenario-emoji">🔍</div>
+          <div>
+            <h4>Cross-reference public records</h4>
+            <div class="for">Great for Katherine</div>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="exchange">
+            <div class="bubble-label you">YOU</div>
+            <div class="bubble you-bubble">I have two spreadsheets — one of federal contractor payments and one of political donations. Find any names that appear in both.</div>
+          </div>
+          <div class="exchange">
+            <div class="bubble-label ai">AI</div>
+            <div class="bubble ai-bubble">I'll fuzzy-match names across both datasets accounting for variations, and produce a table of matches ranked by confidence. Let me write a script...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scenario fade-in">
+        <div class="scenario-top">
+          <div class="scenario-emoji">📰</div>
+          <div>
+            <h4>Build a quick interactive</h4>
+            <div class="for">Works for both</div>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="exchange">
+            <div class="bubble-label you">YOU</div>
+            <div class="bubble you-bubble">Create an interactive timeline of the major events in this story, using this outline I've drafted. Make it embeddable.</div>
+          </div>
+          <div class="exchange">
+            <div class="bubble-label ai">AI</div>
+            <div class="bubble ai-bubble">I'll build a responsive HTML/CSS/JS timeline with scroll animations. You'll be able to preview it locally and share the code with your graphics team.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scenario fade-in">
+        <div class="scenario-top">
+          <div class="scenario-emoji">🎙️</div>
+          <div>
+            <h4>Podcast show prep</h4>
+            <div class="for">Great for Miriam</div>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="exchange">
+            <div class="bubble-label you">YOU</div>
+            <div class="bubble you-bubble">Search for this week's biggest stories in wealth management and private equity. Summarize each with a potential discussion angle for the podcast.</div>
+          </div>
+          <div class="exchange">
+            <div class="bubble-label ai">AI</div>
+            <div class="bubble ai-bubble">Searching now. I'll compile the top stories with key data points, counterarguments, and suggested questions for guests.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scenario fade-in">
+        <div class="scenario-top">
+          <div class="scenario-emoji">📄</div>
+          <div>
+            <h4>Parse a document dump</h4>
+            <div class="for">Great for Katherine</div>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="exchange">
+            <div class="bubble-label you">YOU</div>
+            <div class="bubble you-bubble">I have 2,000 pages of FOIA documents as PDFs. Extract all mentions of dollar amounts, dates, and person names into a searchable spreadsheet.</div>
+          </div>
+          <div class="exchange">
+            <div class="bubble-label ai">AI</div>
+            <div class="bubble ai-bubble">I'll process each PDF, extract the entities you mentioned, deduplicate, and export to CSV. I'll also flag any pages that look redacted or partially illegible.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scenario fade-in">
+        <div class="scenario-top">
+          <div class="scenario-emoji">🌐</div>
+          <div>
+            <h4>Fact-check and source</h4>
+            <div class="for">Works for both</div>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="exchange">
+            <div class="bubble-label you">YOU</div>
+            <div class="bubble you-bubble">Search for the latest SEC filings from Blackstone and compare their reported AUM growth to what they claimed in their last earnings call.</div>
+          </div>
+          <div class="exchange">
+            <div class="bubble-label ai">AI</div>
+            <div class="bubble ai-bubble">I'll pull the most recent 10-Q and earnings transcript, extract the relevant figures, and highlight any discrepancies for you to investigate.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ HOW THIS WAS MADE ═══════════ -->
+<section class="prompt-reveal" id="how-made">
+  <div class="container">
+    <div class="section-label">Behind the Curtain</div>
+    <h2 class="section-title">This page was built by a single prompt</h2>
+    <p class="section-subtitle">Everything you're looking at — the design, the research, the personalization, the code — was generated by Claude Code from the prompt below. No templates, no frameworks, no manual coding.</p>
+
+    <div class="prompt-card">
+      <div class="prompt-card-label">The Exact Prompt</div>
+      <div class="prompt-text">I'm going to teach Miriam Gottfried and Katharine Long at the WSJ how to use claude code. Before we start, they need to buy a $20/month claude subscription, then install claude code CLI on a computer that they can bring to work (depending on dow jones policy they might need a personal computer for this). They should use claude.ai to walk them through this once they get started. Make a static page I can host on github for free that explains this. Make it interesting, beautiful, and graphical. Use appropriate logos and images, and do some web research to personalize it to them. This will also serve as an example of what claude code can do for them!  To that end, at the bottom, you should include this exact prompt with an explanation of how it was made. Think entertaining and highly produced interactive piece for the design. When you're done, be sure to test your work</div>
+    </div>
+
+    <div class="meta-note">
+      <p><strong>How it worked:</strong> Claude Code received this single prompt, then autonomously searched the web to learn about Miriam and Katherine's backgrounds and beats, researched the current Claude Code setup process, designed and wrote all the HTML/CSS/JavaScript you see, and tested the result — all in one continuous session. The entire page is a single <code style="color:var(--gold)">index.html</code> file with no external dependencies (besides Google Fonts), ready to host on GitHub&nbsp;Pages for free.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <p>Built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude Code</a> by Anthropic &middot; March 2026</p>
+  <p style="margin-top:8px;font-size:.78rem;color:#aaa;">This page is not affiliated with or endorsed by The Wall Street Journal or Dow Jones.</p>
+</footer>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+// ── Particles ──
+(function(){
+  const container = document.getElementById('particles');
+  for(let i=0;i<40;i++){
+    const s = document.createElement('span');
+    s.style.left = Math.random()*100+'%';
+    s.style.animationDuration = (8+Math.random()*12)+'s';
+    s.style.animationDelay = Math.random()*10+'s';
+    s.style.width = s.style.height = (2+Math.random()*4)+'px';
+    container.appendChild(s);
+  }
+})();
+
+// ── Scroll-triggered fade-ins ──
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}})
+},{threshold:.15});
+document.querySelectorAll('.fade-in, .step').forEach(el=>observer.observe(el));
+
+// ── Hide/show nav on scroll ──
+let lastScroll=0;
+const nav=document.getElementById('topnav');
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  if(y>100 && y>lastScroll) nav.classList.add('hidden');
+  else nav.classList.remove('hidden');
+  lastScroll=y;
+},{passive:true});
+
+// ── Terminal demo animation ──
+(function(){
+  const lines = [
+    {text:'$ claude', cls:'prompt-cmd', delay:600},
+    {text:'', cls:'', delay:300},
+    {text:'  ╭──────────────────────────────────────╮', cls:'border', delay:50},
+    {text:'  │        Welcome to Claude Code        │', cls:'border', delay:50},
+    {text:'  │     Your AI programming assistant     │', cls:'border', delay:50},
+    {text:'  ╰──────────────────────────────────────╯', cls:'border', delay:50},
+    {text:'', cls:'', delay:200},
+    {text:'  ✓ Authenticated as miriam@wsj.com', cls:'success', delay:800},
+    {text:'', cls:'', delay:200},
+    {text:'  What would you like to do?', cls:'question', delay:400},
+    {text:'', cls:'', delay:300},
+    {text:'  > Analyze the latest Blackstone 10-Q filing_', cls:'input', delay:100},
+  ];
+
+  const demo = document.getElementById('demo');
+  let started = false;
+
+  const demoObs = new IntersectionObserver((entries)=>{
+    if(entries[0].isIntersecting && !started){
+      started=true;
+      let totalDelay=0;
+      lines.forEach(l=>{
+        totalDelay+=l.delay;
+        setTimeout(()=>{
+          const div=document.createElement('div');
+          div.className='line';
+          div.style.animationDelay='0s';
+          if(l.cls==='prompt-cmd') div.innerHTML='<span style="color:#a6e3a1;font-weight:700">'+l.text+'</span>';
+          else if(l.cls==='border') div.innerHTML='<span style="color:#6c7086">'+l.text+'</span>';
+          else if(l.cls==='success') div.innerHTML='<span style="color:#a6e3a1">'+l.text+'</span>';
+          else if(l.cls==='question') div.innerHTML='<span style="color:#cdd6f4">'+l.text+'</span>';
+          else if(l.cls==='input') div.innerHTML='<span style="color:#f9e2af">'+l.text+'</span>';
+          else div.textContent=l.text;
+          demo.appendChild(div);
+        },totalDelay);
+      });
+    }
+  },{threshold:.5});
+  demoObs.observe(demo);
+})();
+
+// ── Smooth scroll for nav links ──
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const target=document.querySelector(a.getAttribute('href'));
+    if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+</script>
+
+</body>
+</html>
