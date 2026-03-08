@@ -10,7 +10,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#1a1a1a;--cream:#faf8f5;--gold:#c4a35a;--gold-light:#f0e6c8;
+  --ink:#1a1a1a;--cream:#f3efe8;--gold:#b8923e;--gold-light:#ece0c4;
   --blue:#2563eb;--blue-dark:#1e40af;--coral:#e85d4a;
   --wsj-rule:#c4c4c4;--font-serif:'Playfair Display',Georgia,serif;
   --font-sans:'Inter',-apple-system,system-ui,sans-serif;
@@ -91,7 +91,7 @@ body{font-family:var(--font-sans);color:var(--ink);background:var(--cream);overf
 
 /* ── SECTION BASICS ─────────────────────────────── */
 section{padding:80px 0}
-section:nth-child(even){background:#fff}
+section:nth-child(even){background:#faf8f5}
 
 .section-label{
   font-family:var(--font-mono);font-size:.75rem;letter-spacing:.15em;
@@ -104,15 +104,15 @@ section:nth-child(even){background:#fff}
   font-weight:700;line-height:1.15;margin-bottom:16px;
 }
 .section-subtitle{
-  font-size:1.05rem;color:#555;max-width:620px;line-height:1.6;margin-bottom:40px;
+  font-size:1.05rem;color:#3d3d3d;max-width:620px;line-height:1.6;margin-bottom:40px;
 }
 
 /* ── PROFILES ───────────────────────────────────── */
 .profiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:32px;margin-top:40px}
 .profile-card{
-  border:1px solid var(--wsj-rule);border-radius:12px;overflow:hidden;
+  border:1px solid #b8b3a8;border-radius:12px;overflow:hidden;
   background:#fff;transition:transform .3s,box-shadow .3s;
-  position:relative;
+  position:relative;box-shadow:0 2px 12px rgba(0,0,0,.08);
 }
 .profile-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
 .profile-header{
@@ -134,7 +134,7 @@ section:nth-child(even){background:#fff}
 .profile-card h3{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;margin-bottom:4px}
 .profile-card .role{font-size:.9rem;opacity:.7;font-weight:300}
 .profile-body{padding:24px 28px}
-.profile-body p{font-size:.95rem;color:#444;line-height:1.65;margin-bottom:12px}
+.profile-body p{font-size:.95rem;color:#2d2d2d;line-height:1.65;margin-bottom:12px}
 .profile-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
 .profile-tags span{
   font-size:.75rem;padding:4px 12px;border-radius:100px;
@@ -144,8 +144,9 @@ section:nth-child(even){background:#fff}
 /* ── WHY SECTION ────────────────────────────────── */
 .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px}
 .why-card{
-  padding:28px;border-radius:12px;border:1px solid #e8e4de;
+  padding:28px;border-radius:12px;border:1px solid #d5cfc5;
   background:#fff;transition:border-color .3s,box-shadow .3s;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 .why-card:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(196,163,90,.1)}
 .why-icon{
@@ -156,8 +157,8 @@ section:nth-child(even){background:#fff}
 .why-icon.research{background:#eef2ff;color:var(--blue)}
 .why-icon.speed{background:#fef3c7;color:#d97706}
 .why-icon.data{background:#ecfdf5;color:#059669}
-.why-card h4{font-weight:600;margin-bottom:8px;font-size:1.05rem}
-.why-card p{font-size:.9rem;color:#666;line-height:1.55}
+.why-card h4{font-weight:600;margin-bottom:8px;font-size:1.05rem;color:var(--ink)}
+.why-card p{font-size:.9rem;color:#3d3d3d;line-height:1.55}
 
 /* ── TIMELINE / STEPS ───────────────────────────── */
 .steps{position:relative;padding-left:40px;margin-top:40px}
@@ -176,8 +177,8 @@ section:nth-child(even){background:#fff}
   box-shadow:0 0 0 4px var(--cream);
 }
 section:nth-child(even) .step-number{box-shadow:0 0 0 4px #fff}
-.step h3{font-family:var(--font-serif);font-size:1.3rem;font-weight:700;margin-bottom:8px}
-.step p{font-size:.95rem;color:#555;line-height:1.6;max-width:650px}
+.step h3{font-family:var(--font-serif);font-size:1.3rem;font-weight:700;margin-bottom:8px;color:var(--ink)}
+.step p{font-size:.95rem;color:#2d2d2d;line-height:1.6;max-width:650px}
 
 /* ── CODE BLOCKS ────────────────────────────────── */
 .code-block{
@@ -207,7 +208,8 @@ section:nth-child(even) .step-number{box-shadow:0 0 0 4px #fff}
 .scenario-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:24px;margin-top:32px}
 .scenario{
   border-radius:12px;overflow:hidden;
-  border:1px solid #e8e4de;background:#fff;
+  border:1px solid #d5cfc5;background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
   transition:transform .3s,box-shadow .3s;
 }
 .scenario:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.06)}
@@ -216,8 +218,8 @@ section:nth-child(even) .step-number{box-shadow:0 0 0 4px #fff}
   display:flex;align-items:center;gap:14px;
 }
 .scenario-emoji{font-size:1.6rem}
-.scenario-top h4{font-size:1rem;font-weight:600}
-.scenario-top .for{font-size:.8rem;color:var(--gold);font-weight:500;margin-top:2px}
+.scenario-top h4{font-size:1rem;font-weight:600;color:var(--ink)}
+.scenario-top .for{font-size:.8rem;color:#8a6d1b;font-weight:600;margin-top:2px}
 .scenario-body{padding:20px 24px}
 .scenario-body .exchange{margin-bottom:12px;display:flex;gap:10px}
 .scenario-body .exchange:last-child{margin-bottom:0}
@@ -231,8 +233,8 @@ section:nth-child(even) .step-number{box-shadow:0 0 0 4px #fff}
   font-size:.88rem;line-height:1.55;padding:10px 14px;border-radius:10px;
   max-width:100%;
 }
-.bubble.you-bubble{background:#eef2ff;color:#1e3a5f}
-.bubble.ai-bubble{background:#fef7ee;color:#5c3d1f}
+.bubble.you-bubble{background:#e0e7ff;color:#1e2a4a}
+.bubble.ai-bubble{background:#fcecd6;color:#3d2810}
 
 /* ── CALLOUT ────────────────────────────────────── */
 .callout{
@@ -276,7 +278,7 @@ section:nth-child(even) .step-number{box-shadow:0 0 0 4px #fff}
 /* ── FOOTER ─────────────────────────────────────── */
 footer{
   text-align:center;padding:40px 24px;
-  font-size:.85rem;color:#888;
+  font-size:.85rem;color:#555;
   border-top:1px solid var(--wsj-rule);
 }
 footer a{color:var(--gold);text-decoration:none}
@@ -322,7 +324,7 @@ footer a:hover{text-decoration:underline}
 }
 .price-tag .dollar{font-size:1.2rem;font-weight:700;color:var(--gold)}
 .price-tag .amount{font-size:2.8rem;font-weight:900;color:var(--ink);line-height:1}
-.price-tag .period{font-size:1rem;color:#888;font-weight:400}
+.price-tag .period{font-size:1rem;color:#555;font-weight:400}
 
 /* ── NAV ────────────────────────────────────────── */
 .topnav{
@@ -511,7 +513,7 @@ footer a:hover{text-decoration:underline}
 <span class="comment"># Or if you have Node.js (alternative method)</span>
 <span class="prompt">$</span> <span class="cmd">npm</span> install <span class="flag">-g</span> @anthropic-ai/claude-code
         </div>
-        <p style="margin-top:12px;color:#888;font-size:.9rem;">Not sure how to open a terminal? On Mac, search for "Terminal" in Spotlight (⌘ + Space). Use <strong>claude.ai</strong> (the chat interface) to walk you through it — just ask!</p>
+        <p style="margin-top:12px;color:#555;font-size:.9rem;">Not sure how to open a terminal? On Mac, search for "Terminal" in Spotlight (⌘ + Space). Use <strong>claude.ai</strong> (the chat interface) to walk you through it — just ask!</p>
       </div>
 
       <div class="step fade-in">
@@ -689,7 +691,7 @@ footer a:hover{text-decoration:underline}
 <!-- ═══════════ FOOTER ═══════════ -->
 <footer>
   <p>Built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude Code</a> by Anthropic &middot; March 2026</p>
-  <p style="margin-top:8px;font-size:.78rem;color:#aaa;">This page is not affiliated with or endorsed by The Wall Street Journal or Dow Jones.</p>
+  <p style="margin-top:8px;font-size:.78rem;color:#777;">This page is not affiliated with or endorsed by The Wall Street Journal or Dow Jones.</p>
 </footer>
 
 <!-- ═══════════ JAVASCRIPT ═══════════ -->
